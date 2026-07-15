@@ -184,16 +184,12 @@ static int input_processor_scroll_snap_handle_event(const struct device *dev,
             data->remainder.dx = 0;
             break;
         case DIRECTION_DIAG_PLUS:
-            LOG_DBG("Snapping to Diagonal (+)");
-            // TODO !!
-            break;
         case DIRECTION_DIAG_MINUS:
-            LOG_DBG("Snapping to Diagonal (-)");
-            // TODO !!
-            break;
         default:
-            new_x = 0;
-            new_y = 0;
+            // 中間領域はスナップせず、生の動きをそのまま通す（自由スクロール）
+            LOG_DBG("Free scroll (no snap)");
+            new_x = data->remainder.dx;
+            new_y = data->remainder.dy;
             break;
     }
 
