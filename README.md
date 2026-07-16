@@ -57,7 +57,7 @@ In the following example, the scroll snap will
 - snap to x axis if $\displaystyle \left|\frac{y}{x}\right| < \frac{5}{8}$.
 - snap to y axis if $\displaystyle \left|\frac{y}{x}\right| > \frac{8}{5}$.
 - ⚠️ not implemented: snap to the diagonal line ($y=\pm x$) if $\displaystyle \frac{5}{8} < \left|\frac{y}{x}\right| < \frac{8}{5}$.
-- collect 10 samples before start snapping
+- collect 10 samples before start snapping (while collecting, events pass through unsnapped, i.e. free scroll)
 - if sum of sample value exceeds 1500, start snapping regardless of the number of collected samples
 - after snapping, lock direction for 200ms
 - after snapping, lock direction for next 10 events

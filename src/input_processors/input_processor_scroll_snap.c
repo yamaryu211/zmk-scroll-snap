@@ -131,20 +131,20 @@ static int input_processor_scroll_snap_handle_event(const struct device *dev,
     data->samples[data->head] = incoming;
     data->sample_sum.dx += abs(incoming.dx);
     data->sample_sum.dy += abs(incoming.dy);
-    data->remainder.dx += incoming.dx;
-    data->remainder.dy += incoming.dy;
     data->sample_count++;
     data->head = (data->head + 1) % config->require_n_samples;
 
     uint16_t abs_x = (uint16_t)(data->sample_sum.dx);
     uint16_t abs_y = (uint16_t)(data->sample_sum.dy);
 
-    // Check if we have enough samples
+    // ウォームアップ中（方向確定前）はイベントをそのまま通す（自由スクロール）
     if (!(data->sample_count >= config->require_n_samples || abs_x > config->immediate_snap_threshold || abs_y > config->immediate_snap_threshold)) {
-        event->value = 0;
-        event->sync = false;
-        return ZMK_INPUT_PROC_STOP;
+        return ZMK_INPUT_PROC_CONTINUE;
     }
+
+    // パススルー済みイベントと二重出力しないよう、判定対象のイベントのみ remainder に積む
+    data->remainder.dx += incoming.dx;
+    data->remainder.dy += incoming.dy;
 
     int32_t new_x = 0, new_y = 0;
     uint8_t detected_direction = DIRECTION_NONE;
